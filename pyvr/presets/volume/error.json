@@ -1,0 +1,41 @@
+{
+    "color_transfer": [
+      [
+        0.0,
+        1.0,
+        1.0,
+        1.0,
+        0.5,
+        0.0
+      ],
+      [
+        1.0,
+        0.0,
+        0.0,
+        1.0,
+        0.5,
+        0.0
+      ]
+    ],
+    "scalar_opacity": [
+      [
+        0.0,
+        0.0,
+        0.5,
+        0.0
+      ],
+      [
+        1.0,
+        0.5,
+        0.5,
+        0.0
+      ]
+    ],
+    "gradient_opacity": null,
+    "specular": 0.2,
+    "specular_power": 10,
+    "ambient": 0.8,
+    "diffuse": 0.8,
+    "shade": true,
+    "interpolation": true
+  }

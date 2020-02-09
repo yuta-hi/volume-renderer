@@ -1,0 +1,17 @@
+{
+    "color": [
+      [ 1,
+        "skin",
+        0.992157,
+        0.882353,
+        0.6,
+        1.0
+      ]
+    ],
+    "specular": 0.05,
+    "specular_power": 1,
+    "ambient": 0.3,
+    "diffuse": 0.6,
+    "shade": true,
+    "interpolation": "phong"
+  }

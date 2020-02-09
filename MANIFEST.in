@@ -1,0 +1,2 @@
+recursive-include pyvr/presets/volume *.json
+recursive-include pyvr/presets/label *.json
