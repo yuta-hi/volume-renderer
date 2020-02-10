@@ -8,7 +8,8 @@ from .utils.vtk.transforms import euler_transform
 _supported_actors = (
     vtk.vtkActor,
     vtk.vtkVolume,
-    vtk.vtkImageSlice
+    vtk.vtkImageSlice,
+    vtk.vtkAxesActor
 )
 
 class Actor(metaclass=ABCMeta):
