@@ -21,11 +21,12 @@ You can register own preset files. See the `./pyvr/presets`
 
 #### Install
 ```bash
-python setup.py install
+pip install .
 ```
 
 
 ## Usage
+### Python
 #### Volume rendering
 ```python
 from pyvr import volume_render
@@ -100,4 +101,11 @@ from pyvr.utils.video import write_video
 write_video(proj, 'video.mp4')
 ```
 
-
+### Console
+See the help..
+```bash
+volume_render --help
+surface_render --help
+surface_distance_render --help
+isosurface_render --help
+```

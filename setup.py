@@ -18,6 +18,8 @@ setup(
         'console_scripts': [
             'volume_render=scripts.volume_render:main',
             'surface_render=scripts.surface_render:main',
+            'surface_distance_render=scripts.surface_distance_render:main',
+            'isosurface_render=scripts.isosurface_render:main',
         ]
     },
     install_requires=open('requirements.txt').readlines(),

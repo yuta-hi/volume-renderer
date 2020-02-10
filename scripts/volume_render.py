@@ -25,7 +25,7 @@ def main():
     parser.add_argument('--far', type=float, default=3000., help='far clipping plane for the camera')
     parser.add_argument('--rotate_axis', '-axis', type=int, default=2., metavar='AXIS', help='rotation axis for the camera')
     parser.add_argument('--rotate_angles', '-angle', type=int, nargs=3, metavar='ANGLE', default=[0,360,1], help='rotation angles for the camera')
-    parser.add_argument('--size', '-s', type=float, nargs=2, default=[500,800], help='window size')
+    parser.add_argument('--size', '-sz', type=float, nargs=2, default=[500,800], help='window size')
     parser.add_argument('--bg', type=float, nargs=3, default=[1.,1.,1.], help='background color')
     parser.add_argument('--rate', '-r', type=str, default='30/1', help='frame rate for the video')
     parser.add_argument('--vcodec', type=str, default='libx264', help='codec for the video')

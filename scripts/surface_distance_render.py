@@ -5,18 +5,21 @@ import os
 import sys
 import argparse
 
-from pyvr import surface_render
+from pyvr import surface_distance_render
 from pyvr.utils.video import write_video
 
 def main():
 
-    parser = argparse.ArgumentParser(description='Surface render',
+    parser = argparse.ArgumentParser(description='Surface distance render',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--volume', '-v', type=str, help='path to volume file (.mhd)', required=True)
-    parser.add_argument('--preset', '-p', type=str, help='preset name, or path to preset file (.json)', required=True)
+    parser.add_argument('--source', '-s', type=str, help='path to source volume file (.mhd)', required=True)
+    parser.add_argument('--target', '-t', type=str, help='path to target volume file (.mhd)', required=True)
+    parser.add_argument('--source_index', '-si', type=int, default=1, help='index for the source volume')
+    parser.add_argument('--target_index', '-ti', type=int, default=1, help='index for the target volume')
+    parser.add_argument('--cmap', type=str, default='jet', help='colormap for the distance')
+    parser.add_argument('--clim', type=float, nargs=2, default=None, help='color limits for the distance')
     parser.add_argument('--out', '-o', type=str, help='path to output video file (.mp4)', required=True)
     parser.add_argument('--no_centered', '-nc', action='store_false', help='disable the centering of volume')
-    parser.add_argument('--alpha_scale', type=float, default=1., help='scaling factor for the opacity')
     parser.add_argument('--pos', type=float, nargs=3, default=[0,-1000,0], help='position for the camera')
     parser.add_argument('--fp', type=float, nargs=3, default=[0,0,0], help='focal point for the camera')
     parser.add_argument('--up', type=float, nargs=3, default=[0,0,1], help='view up direction for the camera')
@@ -32,7 +35,9 @@ def main():
     parser.add_argument('--pix_fmt', type=str, default='yuv420p', help='pixel format for the video')
     args = parser.parse_args()
 
-    proj = surface_render(args.volume, args.preset, centered=args.no_centered, alpha_scale=args.alpha_scale,
+    proj = surface_distance_render(args.source, args.target,
+                    args.source_index, args.target_index,
+                    centered=args.no_centered, cmap=args.cmap, clim=args.clim,
                     pos=args.pos, fp=args.fp, up=args.up,
                     view=args.view, near=args.near, far=args.far,
                     rotate_axis=args.rotate_axis, rotate_angles=list(range(*args.rotate_angles)),
