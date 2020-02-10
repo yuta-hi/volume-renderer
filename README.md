@@ -1,10 +1,13 @@
 # Volume Renderer with VTK
 
+<img src='figs/video.gif' align='right' width='200px'>
+
 This is a VTK wrapper of volume renderer, including:
 - [x] Volume rendering
 - [x] Surface rendering
 - [x] Surface distance rendering
 - [x] Isosurface rendering
+
 
 ## Requirements
 - Python 3
@@ -24,8 +27,16 @@ You can register own preset files. See the `./pyvr/presets`
 pip install .
 ```
 
-
 ## Usage
+
+### Console
+```bash
+volume_render --help
+surface_render --help
+surface_distance_render --help
+isosurface_render --help
+```
+
 ### Python
 #### Volume rendering
 ```python
@@ -94,6 +105,46 @@ return proj
 ```
 <img src='figs/custom.jpg' width='150px'>
 
+#### Slice
+```python
+from pyvr.renderer import Renderer
+from pyvr.actors import VolumeActor
+from pyvr.actors import SliceActor
+from pyvr.data.volume import load_volume
+
+volume = load_volume(volume_file)
+clim = (-150, 350)
+
+renderer = Renderer()
+renderer.set_camera(pos=(0,-1000,0))
+renderer.add_actor(VolumeActor(volume, 'bone'))
+renderer.add_actor(SliceActor(volume, normal=(1,0,0), clim=clim))
+renderer.add_actor(SliceActor(volume, normal=(0,1,0), clim=clim))
+renderer.add_actor(SliceActor(volume, normal=(0,0,1), clim=clim))
+proj = renderer.render(rotate_angles=rotate_angles, bg=bg)
+
+return proj
+```
+<img src='figs/slice.jpg' width='150px'>
+
+#### Landmark
+```python
+from pyvr.renderer import Renderer
+from pyvr.actors import VolumeActor
+from pyvr.actors import LandmarkActor
+
+renderer = Renderer()
+renderer.set_camera(pos=(0,-1000,0))
+renderer.add_actor(VolumeActor(volume, 'bone'))
+renderer.add_actor(LandmarkActor((99.658,-53.036,-195.258), 10, rgb=(1,0,0)))
+renderer.add_actor(LandmarkActor((-105.237,-57.957,-188.071), 10, rgb=(0,1,0)))
+renderer.add_actor(LandmarkActor((0.753,-52.335,-105.167), 10, rgb=(0,0,1)))
+proj = renderer.render(rotate_angles=rotate_angles, bg=bg)
+
+return proj
+```
+<img src='figs/landmark.jpg' width='150px'>
+
 
 #### Write projections as video
 ```python
@@ -101,11 +152,4 @@ from pyvr.utils.video import write_video
 write_video(proj, 'video.mp4')
 ```
 
-### Console
-See the help..
-```bash
-volume_render --help
-surface_render --help
-surface_distance_render --help
-isosurface_render --help
-```
+
