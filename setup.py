@@ -14,7 +14,12 @@ setup(
     author='yuta-hi',
     packages=find_packages(),
     include_package_data=True,
-    scripts=[],
+    entry_points={
+        'console_scripts': [
+            'volume_render=scripts.volume_render:main',
+            'surface_render=scripts.surface_render:main',
+        ]
+    },
     install_requires=open('requirements.txt').readlines(),
     url='https://github.com/yuta-hi/volume-renderer',
     license='MIT',
