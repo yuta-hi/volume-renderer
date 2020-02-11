@@ -156,6 +156,7 @@ class InteractiveMultiViewRenderer(InteractiveRenderer):
             ren.SetOcclusionRatio(0.0)
             ren.AddActor(actor)
 
+            renderer.append(ren)
             window.AddRenderer(ren)
 
         self._renderer = renderer
