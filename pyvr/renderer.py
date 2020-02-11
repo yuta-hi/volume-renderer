@@ -121,3 +121,41 @@ class Renderer(metaclass=ABCMeta):
 
     def __call__(self, *args, **kwargs):
         return self.render(*args, **kwargs)
+
+
+class InteractiveRenderer(Renderer):
+
+    def render(self, size=_default_window_size, bg=_default_bg_color):
+        self.interactor(size=size, bg=bg)
+
+
+class InteractiveMultiViewRenderer(InteractiveRenderer):
+
+    def _make_window(self, size, bg):
+
+        n_viewport = len(self._actors)
+        x_grid = np.linspace(0.0, 1.0, n_viewport + 1)
+
+        window = vtk.vtkRenderWindow()
+        window.SetAlphaBitPlanes(True)
+        window.SetMultiSamples(0)
+        window.SetSize(size[0] * n_viewport, size[1])
+
+        renderer = []
+
+        for i, actor in enumerate(self._actors):
+
+            ren = vtk.vtkRenderer()
+            ren.SetViewport(x_grid[i], 0.0, x_grid[i+1], 1.0)
+            ren.SetBackground(bg[0], bg[1], bg[2])
+            ren.SetActiveCamera(self._camera)
+            ren.LightFollowCameraOn()
+            ren.SetUseDepthPeeling(True)
+            ren.SetMaximumNumberOfPeels(100)
+            ren.SetOcclusionRatio(0.0)
+            ren.AddActor(actor)
+
+            window.AddRenderer(ren)
+
+        self._renderer = renderer
+        self._window = window
