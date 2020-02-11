@@ -77,6 +77,7 @@ class Renderer(metaclass=ABCMeta):
 
         iren = vtk.vtkRenderWindowInteractor()
         iren.SetRenderWindow(self._window)
+        iren.GetInteractorStyle().SetCurrentStyleToTrackballCamera()
 
         iren.Initialize()
         self._window.Render()
