@@ -153,3 +153,18 @@ write_video(proj, 'video.mp4')
 ```
 
 
+#### Interactive rendering with multiple viewports
+```python
+from pyvr.renderer import InteractiveMultiViewRenderer
+from pyvr.actors import VolumeActor
+from pyvr.actors import SurfaceActor
+
+renderer.set_camera(pos=(0,-1200,0))
+renderer.add_actor(VolumeActor(volume, 'muscle'))
+renderer.add_actor(SurfaceActor(label, 'muscle'))
+renderer.add_actor(VolumeActor(uncertainty, 'uncertainty'))
+renderer.render(bg=(1,1,1))
+```
+<img src='figs/interactor.gif' width='500px'>
+
+See also [Bayesian U-Net](https://github.com/yuta-hi/bayesian_unet) for uncertainty estimates.
