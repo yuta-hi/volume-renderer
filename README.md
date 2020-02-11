@@ -159,6 +159,7 @@ from pyvr.renderer import InteractiveMultiViewRenderer
 from pyvr.actors import VolumeActor
 from pyvr.actors import SurfaceActor
 
+renderer = InteractiveMultiViewRenderer()
 renderer.set_camera(pos=(0,-1200,0))
 renderer.add_actor(VolumeActor(volume, 'muscle'))
 renderer.add_actor(SurfaceActor(label, 'muscle'))
