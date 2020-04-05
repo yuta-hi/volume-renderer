@@ -6,3 +6,4 @@ from .isosurface import IsosurfaceActor
 from .surface_distance import SurfaceDistanceActor
 from .slice import SliceActor
 from .landmark import LandmarkActor
+from .bounding_box import BoundingBoxActor
