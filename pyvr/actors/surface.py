@@ -32,7 +32,7 @@ class SurfaceActor(Actor):
             label = numpy_to_volume(label, spacing, origin)
 
 
-        if isinstance(volume, sitk.SimpleITK.Image):
+        if isinstance(label, sitk.SimpleITK.Image):
             volume = sitkToVTK(volume)
 
         if centered:

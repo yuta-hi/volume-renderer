@@ -31,7 +31,7 @@ class IsosurfaceActor(Actor):
             spacing, origin = [1,1,1], [0,0,0]
             label = numpy_to_volume(label, spacing, origin)
 
-        if isinstance(volume, sitk.SimpleITK.Image):
+        if isinstance(label, sitk.SimpleITK.Image):
             volume = sitkToVTK(volume)
 
         if centered:
