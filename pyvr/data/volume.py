@@ -7,16 +7,24 @@ import numpy as np
 import vtk
 from vtk.util.numpy_support import numpy_to_vtk
 from vtk.util.numpy_support import vtk_to_numpy
+import SimpleITK as sitk
 
+
+def sitkToVTK(img):
+    data = sitk.GetArrayFromImage(img)
+    data_type = vtk.VTK_FLOAT
+    flat_data_array = data.flatten()
+    vtk_data = numpy_to_vtk(num_array=flat_data_array, deep=True, array_type=data_type)
+    shape = data.shape
+    img = vtk.vtkImageData()
+    img.GetPointData().SetScalars(vtk_data)
+    img.SetDimensions( shape[2], shape[1], shape[0])
+    img.SetSpacing = img.GetSpacing
+    return img
 
 def load_volume(path):
-
-    reader = vtk.vtkMetaImageReader()
-    reader.SetFileName(path)
-    reader.Update()
-
-    volume = reader.GetOutput()
-
+    i_sitk = sitk.ReadImage(path)
+    volume = sitkToVTK(i_sitk)
     return volume
 
 
