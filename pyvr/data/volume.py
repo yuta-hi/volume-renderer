@@ -9,23 +9,27 @@ from vtk.util.numpy_support import numpy_to_vtk
 from vtk.util.numpy_support import vtk_to_numpy
 import SimpleITK as sitk
 
+def load_volume(path):
+    reader = vtk.vtkNIFTIImageReader()
+    reader.SetFileName(path)
+    reader.Update()
+    volume = reader.GetOutput()
+    return volume
 
-def sitkToVTK(img):
-    data = sitk.GetArrayFromImage(img)
+
+def sitkToVTK(img_sitk):
+    """ convert an sitk image to a vtk object
+    """
+    data = sitk.GetArrayFromImage(img_sitk)
     data_type = vtk.VTK_FLOAT
     flat_data_array = data.flatten()
     vtk_data = numpy_to_vtk(num_array=flat_data_array, deep=True, array_type=data_type)
     shape = data.shape
     img = vtk.vtkImageData()
     img.GetPointData().SetScalars(vtk_data)
-    img.SetDimensions( shape[2], shape[1], shape[0])
+    img.SetDimensions(shape[2], shape[1], shape[0])
     img.SetSpacing = img.GetSpacing
     return img
-
-def load_volume(path):
-    i_sitk = sitk.ReadImage(path)
-    volume = sitkToVTK(i_sitk)
-    return volume
 
 
 def centering(volume):

@@ -3,12 +3,17 @@ from __future__ import absolute_import
 import vtk
 import numpy as np
 
-from ..data.volume import load_volume
-from ..data.volume import centering
-from ..data.volume import numpy_to_volume
+from ..data.volume import (
+    load_volume,
+    sitkToVTK,
+    centering,
+    numpy_to_volume
+    )
 from ..actor import Actor
 from ..utils.vtk.transforms import centered_transform
 from ..preset import VolumePreset
+import SimpleITK as sitk
+
 
 class VolumeActor(Actor):
     """ Actor for volume raycasting """
@@ -22,6 +27,9 @@ class VolumeActor(Actor):
         if isinstance(volume, np.ndarray):
             spacing, origin = [1,1,1], [0,0,0]
             volume = numpy_to_volume(volume, spacing, origin)
+
+        if isinstance(volume, sitk.SimpleITK.Image):
+            volume = sitkToVTK(volume)
 
         if centered:
             volume = centering(volume)

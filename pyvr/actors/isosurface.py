@@ -3,12 +3,17 @@ from __future__ import absolute_import
 import vtk
 import numpy as np
 
-from ..data.volume import load_volume
-from ..data.volume import centering
-from ..data.volume import numpy_to_volume
+from ..data.volume import (
+    load_volume,
+    sitkToVTK,
+    centering,
+    numpy_to_volume
+    )
 from ..data.surface import label_to_surface
 from ..actor import Actor
 from ..utils.vtk.transforms import centered_transform
+import SimpleITK as sitk
+
 
 class IsosurfaceActor(Actor):
     """ Actor for isosurface rendering """
@@ -25,6 +30,9 @@ class IsosurfaceActor(Actor):
         if isinstance(label, np.ndarray):
             spacing, origin = [1,1,1], [0,0,0]
             label = numpy_to_volume(label, spacing, origin)
+
+        if isinstance(volume, sitk.SimpleITK.Image):
+            volume = sitkToVTK(volume)
 
         if centered:
             label = centering(label)
