@@ -33,7 +33,7 @@ class SurfaceActor(Actor):
 
 
         if isinstance(label, sitk.SimpleITK.Image):
-            volume = sitkToVTK(volume)
+            label = sitkToVTK(label)
 
         if centered:
             label = centering(label)
