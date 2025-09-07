@@ -6,6 +6,7 @@ This is a VTK wrapper of volume renderer, including:
 - [x] Volume rendering
 - [x] Surface rendering
 - [x] Surface distance rendering
+- [x] Geodesic distance rendering
 - [x] Isosurface rendering
 
 
