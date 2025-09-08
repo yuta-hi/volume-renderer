@@ -41,10 +41,37 @@ def _geodesic_distances(surface, query_point):
     return distances
 
 
+def _normalize_distances(distances, clim_max):
+
+    if isinstance(clim_max, (int,float)):
+        clim_max = float(clim_max)
+    elif isinstance(clim_max, str):
+        if clim_max == 'max':
+            clim_max = np.max(distances)
+        elif clim_max == 'mean':
+            clim_max = np.mean(distances)
+        elif clim_max == 'median':
+            clim_max = np.median(distances)
+        elif clim_max.startswith('ptile'):
+            pval = int(clim_max.replace('ptile', ''))
+            clim_max = np.percentile(distances, pval)
+        else:
+            raise ValueError('unsupported normalization type..<%s>' % clim_max)
+    else:
+        raise ValueError('invalid value..')
+
+    if clim_max > 0:
+        distances /= clim_max
+    distances = np.clip(distances * 255., None, 255.)
+    distances[distances < 0] = -1.
+
+    return distances
+
+
 class GeodesicDistanceActor(Actor):
     """ Actor for geodesic distance rendering """
     def __init__(self, label, query_point, label_index=1,
-                 centered=True, cmap='jet', clim_max=None):
+                 centered=True, cmap='jet', clim_max='ptile95'):
         super().__init__()
 
         if isinstance(label, str):
@@ -60,6 +87,7 @@ class GeodesicDistanceActor(Actor):
         surface = label_to_surface(label, label_index)
 
         distances = _geodesic_distances(surface, query_point)
+        distances = _normalize_distances(distances, clim_max)
         set_scalars(surface, distances)
 
         self._surface = surface
@@ -75,27 +103,21 @@ class GeodesicDistanceActor(Actor):
     def update_mapper(self):
 
         surface = self._surface
-        clim_max = self._clim_max
+        cmap = cm.get_cmap(self._cmap)
 
         scalar_range = surface.GetScalarRange()
-        n_tables = int(np.ceil(scalar_range[1]))
-
-        cmap = cm.get_cmap(self._cmap, n_tables)
 
         lut = vtk.vtkLookupTable()
-        lut.SetNumberOfTableValues(n_tables + 1)
+        lut.SetNumberOfTableValues(257)
         lut.SetTableValue(0, 1.0, 1.0, 1.0, 1.0)
-        for i in range(n_tables):
+        for i in range(256):
             r, g, b, a = cmap(float(i)/255.)
             lut.SetTableValue(i + 1, r, g, b, a)
         lut.Build()
 
         mapper = vtk.vtkPolyDataMapper()
         mapper.SetInputData(surface)
-        if clim_max is None:
-            mapper.SetScalarRange(-1.0, scalar_range[1])
-        else:
-            mapper.SetScalarRange(-1.0, float(clim_max))
+        mapper.SetScalarRange(-1.0, scalar_range[1])
         mapper.SetLookupTable(lut)
         mapper.Update()
 
