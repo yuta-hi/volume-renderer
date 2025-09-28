@@ -71,7 +71,7 @@ def _normalize_distances(distances, clim_max):
 class GeodesicDistanceActor(Actor):
     """ Actor for geodesic distance rendering """
     def __init__(self, label, query_point, label_index=1,
-                 centered=True, cmap='jet', clim_max='ptile95'):
+                 centered=True, cmap='jet', alpha=1., clim_max='ptile95'):
         super().__init__()
 
         if isinstance(label, str):
@@ -94,6 +94,7 @@ class GeodesicDistanceActor(Actor):
         self._query_point = query_point
         self._label_index = label_index
         self._cmap = cmap
+        self._alpha = alpha
         self._clim_max = clim_max
 
         self.update_mapper()
@@ -109,10 +110,10 @@ class GeodesicDistanceActor(Actor):
 
         lut = vtk.vtkLookupTable()
         lut.SetNumberOfTableValues(257)
-        lut.SetTableValue(0, 1.0, 1.0, 1.0, 1.0)
+        lut.SetTableValue(0, 1.0, 1.0, 1.0, self._alpha)
         for i in range(256):
-            r, g, b, a = cmap(float(i)/255.)
-            lut.SetTableValue(i + 1, r, g, b, a)
+            r, g, b, _ = cmap(float(i)/255.)
+            lut.SetTableValue(i + 1, r, g, b, self._alpha)
         lut.Build()
 
         mapper = vtk.vtkPolyDataMapper()

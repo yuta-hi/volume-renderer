@@ -51,7 +51,7 @@ def _absolute_surface_distance(source, target):
 class SurfaceDistanceActor(Actor):
     """ Actor for surface distance rendering """
     def __init__(self, source, target, source_index=1, target_index=1,
-                 centered=True, cmap='jet', clim=None):
+                 centered=True, cmap='jet', alpha=1.,clim=None):
 
         super().__init__()
 
@@ -66,6 +66,7 @@ class SurfaceDistanceActor(Actor):
         self._source_index = source_index
         self._target_index = target_index
         self._cmap = cmap
+        self._alpha = alpha
         self._clim = clim
 
         self.update_mapper()
@@ -81,8 +82,8 @@ class SurfaceDistanceActor(Actor):
         lut = vtk.vtkLookupTable()
         lut.SetNumberOfTableValues(255)
         for i in range(255):
-            r, g, b, a = cmap(float(i)/255.)
-            lut.SetTableValue(i, r, g, b, a)
+            r, g, b, _ = cmap(float(i)/255.)
+            lut.SetTableValue(i, r, g, b, self._alpha)
         lut.Build()
 
         mapper = vtk.vtkPolyDataMapper()
